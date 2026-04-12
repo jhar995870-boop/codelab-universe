@@ -70,17 +70,20 @@ const missions = [
   {
     title: "🌧 Rainfall Prediction",
     desc: "Print Accuracy: 0.9",
-    check: (code) => code.includes("Accuracy: 0.9")
+    check: (code) => code.includes("Accuracy: 0.9"),
+    hint: "Try printing accuracy like: print('Accuracy: 0.9')"
   },
   {
     title: "📊 Data Analysis",
     desc: "Print Mean: 5",
-    check: (code) => code.includes("Mean: 5")
+    check: (code) => code.includes("Mean: 5"),
+    hint: "Hint: Use print('Mean: 5')"
   },
   {
     title: "💰 Finance Model",
     desc: "Print Profit: 1000",
-    check: (code) => code.includes("Profit: 1000")
+    check: (code) => code.includes("Profit: 1000"),
+    hint: "Hint: print('Profit: 1000')"
   }
 ];
 
@@ -106,6 +109,7 @@ function selectMission(index) {
   document.getElementById("title").innerText = currentMission.title;
   document.getElementById("desc").innerText = currentMission.desc;
   document.getElementById("output").innerText = "";
+  document.getElementById("ai").innerText = "";
 }
 
 function run() {
@@ -115,11 +119,29 @@ function run() {
 
   if (currentMission.check(code)) {
     document.getElementById("output").innerText = "✅ Mission Passed";
+    document.getElementById("ai").innerText = "🎉 Great job! You're learning fast!";
   } else {
     document.getElementById("output").innerText = "❌ Try again";
+    giveAIHint(code);
   }
 }
-</script>
 
+// 🤖 AI LOGIC
+function giveAIHint(code) {
+  let response = "🤖 AI: ";
+
+  if (code.length < 5) {
+    response += "Start by writing some code!";
+  } 
+  else if (!code.includes("print")) {
+    response += "You should use print() to display output.";
+  } 
+  else {
+    response += currentMission.hint;
+  }
+
+  document.getElementById("ai").innerText = response;
+}
+</script>
 </body>
 </html>
