@@ -34,6 +34,16 @@ o# codelab-universe
       border-radius: 15px;
       margin-top: 20px;
     }
+    .mission {
+      background: #334155;
+      margin: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .mission:hover {
+      background: #475569;
+    }
   </style>
 </head>
 
@@ -41,9 +51,13 @@ o# codelab-universe
 
 <h1>🚀 CodeLab Universe</h1>
 
-<div class="card">
-  <h2>🌧 Mission: Rainfall Prediction</h2>
-  <p>Print accuracy above 0.8</p>
+<h2>Select Mission</h2>
+
+<div id="missions"></div>
+
+<div class="card" id="missionArea" style="display:none;">
+  <h2 id="title"></h2>
+  <p id="desc"></p>
 
   <textarea id="code"></textarea><br>
   <button onclick="run()">Run Code</button>
@@ -52,10 +66,54 @@ o# codelab-universe
 </div>
 
 <script>
+const missions = [
+  {
+    title: "🌧 Rainfall Prediction",
+    desc: "Print Accuracy: 0.9",
+    check: (code) => code.includes("Accuracy: 0.9")
+  },
+  {
+    title: "📊 Data Analysis",
+    desc: "Print Mean: 5",
+    check: (code) => code.includes("Mean: 5")
+  },
+  {
+    title: "💰 Finance Model",
+    desc: "Print Profit: 1000",
+    check: (code) => code.includes("Profit: 1000")
+  }
+];
+
+let currentMission = null;
+
+// Load missions
+const missionDiv = document.getElementById("missions");
+
+missions.forEach((m, index) => {
+  const div = document.createElement("div");
+  div.className = "mission";
+  div.innerText = m.title;
+
+  div.onclick = () => selectMission(index);
+
+  missionDiv.appendChild(div);
+});
+
+function selectMission(index) {
+  currentMission = missions[index];
+
+  document.getElementById("missionArea").style.display = "block";
+  document.getElementById("title").innerText = currentMission.title;
+  document.getElementById("desc").innerText = currentMission.desc;
+  document.getElementById("output").innerText = "";
+}
+
 function run() {
   const code = document.getElementById("code").value;
 
-  if (code.includes("Accuracy: 0.9")) {
+  if (!currentMission) return;
+
+  if (currentMission.check(code)) {
     document.getElementById("output").innerText = "✅ Mission Passed";
   } else {
     document.getElementById("output").innerText = "❌ Try again";
