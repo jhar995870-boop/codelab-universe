@@ -66,41 +66,43 @@ o# codelab-universe
   <h3 id="output"></h3>
   <h3 id="ai" style="color:#38bdf8;"></h3>
 </div>
-
 <script>
+let xp = localStorage.getItem("xp") ? parseInt(localStorage.getItem("xp")) : 0;
+let level = Math.floor(xp / 50) + 1;
+
+document.getElementById("xp").innerText = xp;
+document.getElementById("level").innerText = level;
+
 const missions = [
   {
     title: "🌧 Rainfall Prediction",
     desc: "Print Accuracy: 0.9",
     check: (code) => code.includes("Accuracy: 0.9"),
-    hint: "Try printing accuracy like: print('Accuracy: 0.9')"
+    hint: "Try: print('Accuracy: 0.9')"
   },
   {
     title: "📊 Data Analysis",
     desc: "Print Mean: 5",
     check: (code) => code.includes("Mean: 5"),
-    hint: "Hint: Use print('Mean: 5')"
+    hint: "Try: print('Mean: 5')"
   },
   {
     title: "💰 Finance Model",
     desc: "Print Profit: 1000",
     check: (code) => code.includes("Profit: 1000"),
-    hint: "Hint: print('Profit: 1000')"
+    hint: "Try: print('Profit: 1000')"
   }
 ];
 
 let currentMission = null;
 
-// Load missions
 const missionDiv = document.getElementById("missions");
 
 missions.forEach((m, index) => {
   const div = document.createElement("div");
   div.className = "mission";
   div.innerText = m.title;
-
   div.onclick = () => selectMission(index);
-
   missionDiv.appendChild(div);
 });
 
@@ -114,6 +116,18 @@ function selectMission(index) {
   document.getElementById("ai").innerText = "";
 }
 
+// 🎯 XP FUNCTION
+function addXP(points) {
+  xp += points;
+  level = Math.floor(xp / 50) + 1;
+
+  localStorage.setItem("xp", xp);
+
+  document.getElementById("xp").innerText = xp;
+  document.getElementById("level").innerText = level;
+}
+
+// RUN CODE
 function run() {
   const code = document.getElementById("code").value;
 
@@ -121,24 +135,24 @@ function run() {
 
   if (currentMission.check(code)) {
     document.getElementById("output").innerText = "✅ Mission Passed";
-    document.getElementById("ai").innerText = "🎉 Great job! You're learning fast!";
+    document.getElementById("ai").innerText = "🎉 Great job! +10 XP";
+
+    addXP(10);
   } else {
     document.getElementById("output").innerText = "❌ Try again";
     giveAIHint(code);
   }
 }
 
-// 🤖 AI LOGIC
+// 🤖 AI
 function giveAIHint(code) {
   let response = "🤖 AI: ";
 
   if (code.length < 5) {
     response += "Start by writing some code!";
-  } 
-  else if (!code.includes("print")) {
-    response += "You should use print() to display output.";
-  } 
-  else {
+  } else if (!code.includes("print")) {
+    response += "Use print() to show output.";
+  } else {
     response += currentMission.hint;
   }
 
