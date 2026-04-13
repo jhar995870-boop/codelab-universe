@@ -67,6 +67,43 @@ o# codelab-universe
   <h3 id="ai" style="color:#38bdf8;"></h3>
 </div>
 <script>
+  // 🏆 LEADERBOARD DATA (SIMULATED)
+let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [
+  { name: "Alice", xp: 120 },
+  { name: "Bob", xp: 90 },
+  { name: "You", xp: xp }
+];
+
+// UPDATE YOUR SCORE
+function updateLeaderboard() {
+  leaderboard = leaderboard.map(user => {
+    if (user.name === "You") {
+      return { ...user, xp: xp };
+    }
+    return user;
+  });
+
+  leaderboard.sort((a, b) => b.xp - a.xp);
+
+  localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
+
+  displayLeaderboard();
+}
+
+// SHOW LEADERBOARD
+function displayLeaderboard() {
+  const div = document.getElementById("leaderboard");
+  div.innerHTML = "";
+
+  leaderboard.forEach((user, index) => {
+    const row = document.createElement("div");
+    row.innerText = `#${index + 1} ${user.name} — ${user.xp} XP`;
+    div.appendChild(row);
+  });
+}
+
+// LOAD ON START
+displayLeaderboard();
 let xp = localStorage.getItem("xp") ? parseInt(localStorage.getItem("xp")) : 0;
 let level = Math.floor(xp / 50) + 1;
 
